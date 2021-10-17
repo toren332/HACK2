@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  web:
+    container_name: hack_django
+    build: .
+    command: >
+      bash -c '
+      python manage.py runserver 0.0.0.0:8000
+      '
+    environment:
+      POSTGRES_HOST: "db"
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASS: "${POSTGRES_PASS}"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    expose:
+      - "8000"
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    container_name: hack_db
+    image: mdillon/postgis
+    environment:
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_PORT: "${POSTGRES_PORT}"
+      POSTGRES_USER: "${POSTGRES_USER}"
+      POSTGRES_PASS: "${POSTGRES_PASS}"
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+
+# sudo docker exec -it hack_django python manage.py create_buildings
+# sudo docker exec -it hack_django python manage.py create_poly
+# sudo docker exec -it hack_django service gunicorn stop
+# sudo docker exec -it hack_django gunicorn uapp.wsgi:application --bind 0.0.0.0:8000 --reload
+
