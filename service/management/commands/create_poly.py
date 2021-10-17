@@ -13,40 +13,72 @@ def min_max(l, prop):
     return min(l_), max(l_)
 
 
+def get_norm(l, prop):
+    min_, max_ = min_max(l,prop)
+    mpl.colors.Normalize(vmin=min_, vmax=max_)
+
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         Poly.objects.all().delete()
         poly_models = []
         shape = shapefile.Reader("cells1/cells1.shp")
         shape_records = list(shape.shapeRecords())
-        live_humans_2021_min_max = min_max(shape_records,'home')
-        live_humans_2025_min_max = min_max(shape_records,'home_5year')
-        live_humans_2030_min_max = min_max(shape_records,'home_5year')
-        work_humans_min_max = min_max(shape_records,'job')
-        transports_min_max = min_max(shape_records,'school_opt')
+        live_humans_2021_norm = get_norm(shape_records,'home')
+        live_humans_2025_norm = get_norm(shape_records,'home_5year')
+        live_humans_2030_norm = get_norm(shape_records,'home_5year')
+        potreb_2021_norm = get_norm(shape_records,'potreb')
+        potreb_2025_norm = get_norm(shape_records,'potreb_5ye')
+        potreb_2030_norm = get_norm(shape_records,'potreb_5ye')
+        optima_norm = get_norm(shape_records,'school_opt')
+        school_norm = get_norm(shape_records,'in_schoo_1')
+        work_humans_norm = get_norm(shape_records,'job')
+        transports_norm = get_norm(shape_records,'school_opt')
         for i in tqdm(shape_records):
             polygon = i.shape.__geo_interface__
             data = {
                 'live_humans_2021': int(i.record.home),
                 'live_humans_2025': int(i.record.home_5year),
                 'live_humans_2030': int(i.record.home_5year),
+                'potreb_2021': int(i.record.potreb),
+                'potreb_2025': int(i.record.potreb_5ye),
+                'potreb_2030': int(i.record.potreb_5ye),
+                'optima': int(i.record.school_opt),
+                'school': int(i.record.in_schoo_1),
                 'work_humans': int(i.record.job),
                 'transports': int(i.record.school_opt),
                 'colors': {
                     'live_humans_2021': rgb2hex(cm.ScalarMappable(
-                        norm=mpl.colors.Normalize(vmin=live_humans_2021_min_max[0], vmax=live_humans_2021_min_max[1]), cmap=cm.get_cmap('Oranges')
+                        norm=live_humans_2021_norm, cmap=cm.get_cmap('Oranges')
                     ).to_rgba(float(int(i.record.home)))),
                     'live_humans_2025': rgb2hex(cm.ScalarMappable(
-                        norm=mpl.colors.Normalize(vmin=live_humans_2025_min_max[0], vmax=live_humans_2025_min_max[1]), cmap=cm.get_cmap('Oranges')
+                        norm=live_humans_2025_norm, cmap=cm.get_cmap('Oranges')
                     ).to_rgba(float(int(i.record.home_5year)))),
                     'live_humans_2030': rgb2hex(cm.ScalarMappable(
-                        norm=mpl.colors.Normalize(vmin=live_humans_2030_min_max[0], vmax=live_humans_2030_min_max[1]), cmap=cm.get_cmap('Oranges')
+                        norm=live_humans_2030_norm, cmap=cm.get_cmap('Oranges')
                     ).to_rgba(float(int(i.record.home_5year)))),
+
+                    'potreb_2021': rgb2hex(cm.ScalarMappable(
+                        norm=potreb_2021_norm, cmap=cm.get_cmap('Wistia')
+                    ).to_rgba(float(int(i.record.potreb)))),
+                    'potreb_2025': rgb2hex(cm.ScalarMappable(
+                        norm=potreb_2025_norm, cmap=cm.get_cmap('Wistia')
+                    ).to_rgba(float(int(i.record.potreb_5ye)))),
+                    'potreb_2030': rgb2hex(cm.ScalarMappable(
+                        norm=potreb_2030_norm, cmap=cm.get_cmap('Wistia')
+                    ).to_rgba(float(int(i.record.potreb_5ye)))),
+
                     'work_humans': rgb2hex(cm.ScalarMappable(
-                        norm=mpl.colors.Normalize(vmin=work_humans_min_max[0], vmax=work_humans_min_max[1]), cmap=cm.get_cmap('Reds')
+                        norm=work_humans_norm, cmap=cm.get_cmap('summer')
                     ).to_rgba(float(int(i.record.job)))),
+                    # 'school': rgb2hex(cm.ScalarMappable(
+                    #     norm=school_norm, cmap=cm.get_cmap('Reds')
+                    # ).to_rgba(float(int(i.record.in_schoo_1)))),
                     'transports': rgb2hex(cm.ScalarMappable(
-                        norm=mpl.colors.Normalize(vmin=transports_min_max[0], vmax=transports_min_max[1]), cmap=cm.get_cmap('Greens')
+                        norm=transports_norm, cmap=cm.get_cmap('Greens')
+                    ).to_rgba(float(int(i.record.school_opt)))),
+                    'optima': rgb2hex(cm.ScalarMappable(
+                        norm=optima_norm, cmap=cm.get_cmap('spring')
                     ).to_rgba(float(int(i.record.school_opt)))),
                 },
             }

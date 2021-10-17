@@ -41,6 +41,7 @@ services:
 
 # sudo docker exec -it hack_django python manage.py create_buildings
 # sudo docker exec -it hack_django python manage.py create_poly
+# sudo docker exec -it hack_django python manage.py migrate
 # sudo docker exec -it hack_django service gunicorn stop
 # sudo docker exec -it hack_django gunicorn uapp.wsgi:application --bind 0.0.0.0:8000 --reload
 

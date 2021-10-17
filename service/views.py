@@ -45,12 +45,12 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
             if d is None:
                 d = json.loads(serialize('geojson', queryset,
                                          geometry_field='polygon',
-                                         fields=('id', 'live_humans_2021', 'live_humans_2025', 'live_humans_2030','work_humans', 'transports', 'colors')))
+                                         fields=('id', 'live_humans_2021', 'live_humans_2025', 'live_humans_2030','potreb_2021', 'potreb_2025', 'potreb_2030', 'optima', 'school','work_humans', 'transports', 'colors')))
                 cache.set('poly', d, 60 * 60 * 24)
         else:
             d = json.loads(serialize('geojson', queryset,
                                      geometry_field='polygon',
-                                     fields=('id', 'live_humans_2021', 'live_humans_2025', 'live_humans_2030','work_humans', 'transports', 'colors')))
+                                     fields=('id', 'live_humans_2021', 'live_humans_2025', 'live_humans_2030','potreb_2021', 'potreb_2025', 'potreb_2030', 'optima', 'school','work_humans', 'transports', 'colors')))
 
         resp = Response(d)
         resp["Access-Control-Allow-Origin"] = '*'

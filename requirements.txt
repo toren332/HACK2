@@ -7,7 +7,6 @@ requests
 tqdm
 gunicorn==19.9.0
 django-cors-headers
-fiona
 pyshp
 matplotlib
 tqdm
