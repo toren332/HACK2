@@ -2,11 +2,6 @@ from django.db import models
 from django.contrib.gis.db import models as gis_models
 
 
-class Building(models.Model):
-    point = gis_models.PointField()
-    optimal = models.FloatField()
-
-
 class Poly(models.Model):
     polygon = gis_models.PolygonField()
     live_humans_2021 = models.IntegerField()

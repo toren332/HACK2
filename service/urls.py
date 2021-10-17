@@ -7,7 +7,6 @@ from . import views
 app_name = 'HACK2'
 router = routers.DefaultRouter()
 
-# router.register('building', views.BuildingViewSet, basename='building')
 router.register('poly', views.PolyViewSet, basename='poly')
 
 urlpatterns = router.urls

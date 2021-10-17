@@ -34,10 +34,10 @@ services:
       POSTGRES_PASS: "${POSTGRES_PASS}"
       POSTGRES_HOST_AUTH_METHOD: trust
     ports:
-      - "5433:5433"
+      - "5435:5435"
     expose:
-      - "5433"
-    command: -p 5433
+      - "5435"
+    command: -p 5435
 
 # sudo docker exec -it hack_django python manage.py create_buildings
 # sudo docker exec -it hack_django python manage.py create_poly
