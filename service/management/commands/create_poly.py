@@ -37,14 +37,13 @@ class Command(BaseCommand):
             data = {
                 'live_humans_2021': int(i.record.home),
                 'live_humans_2025': int(i.record.home_5year),
-                'live_humans_2030': int(i.record.home_5year),
+                # 'live_humans_2030': int(i.record.home_5year),
                 'potreb_2021': int(i.record.potreb),
                 'potreb_2025': int(i.record.potreb_5ye),
-                'potreb_2030': int(i.record.potreb_5ye),
-                'optima': int(i.record.school_opt),
+                # 'potreb_2030': int(i.record.potreb_5ye),
+                'optima': int(i.record.new_school),
                 'school': int(i.record.in_schoo_1),
                 'work_humans': int(i.record.job),
-                'transports': int(i.record.school_opt),
                 'colors': {
                     'live_humans_2021': rgb2hex(cm.ScalarMappable(
                         norm=live_humans_2021_norm, cmap=cm.get_cmap('Oranges')
@@ -71,7 +70,7 @@ class Command(BaseCommand):
                     ).to_rgba(float(int(i.record.job)))),
                     'optima': rgb2hex(cm.ScalarMappable(
                         norm=optima_norm, cmap=cm.get_cmap('spring')
-                    ).to_rgba(float(int(i.record.school_opt)))),
+                    ).to_rgba(float(int(i.record.new_school)))),
                 },
             }
             poly = Poly(polygon=Polygon(polygon['coordinates'][0]), **data)
