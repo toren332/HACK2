@@ -15,7 +15,7 @@ def min_max(l, prop):
 
 def get_norm(l, prop):
     min_, max_ = min_max(l,prop)
-    mpl.colors.Normalize(vmin=min_, vmax=max_)
+    return mpl.colors.Normalize(vmin=min_, vmax=max_)
 
 
 class Command(BaseCommand):
