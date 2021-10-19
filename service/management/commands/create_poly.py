@@ -22,18 +22,16 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         Poly.objects.all().delete()
         poly_models = []
-        shape = shapefile.Reader("cells1/cells1.shp")
+        shape = shapefile.Reader("cells_final/cells_final.shp")
         shape_records = list(shape.shapeRecords())
         live_humans_2021_norm = get_norm(shape_records,'home')
         live_humans_2025_norm = get_norm(shape_records,'home_5year')
-        live_humans_2030_norm = get_norm(shape_records,'home_5year')
+        # live_humans_2030_norm = get_norm(shape_records,'home_5year')
         potreb_2021_norm = get_norm(shape_records,'potreb')
         potreb_2025_norm = get_norm(shape_records,'potreb_5ye')
-        potreb_2030_norm = get_norm(shape_records,'potreb_5ye')
-        optima_norm = get_norm(shape_records,'school_opt')
-        school_norm = get_norm(shape_records,'in_schoo_1')
+        # potreb_2030_norm = get_norm(shape_records,'potreb_5ye')
+        optima_norm = get_norm(shape_records,'new_school')
         work_humans_norm = get_norm(shape_records,'job')
-        transports_norm = get_norm(shape_records,'school_opt')
         for i in tqdm(shape_records):
             polygon = i.shape.__geo_interface__
             data = {
@@ -54,9 +52,9 @@ class Command(BaseCommand):
                     'live_humans_2025': rgb2hex(cm.ScalarMappable(
                         norm=live_humans_2025_norm, cmap=cm.get_cmap('Oranges')
                     ).to_rgba(float(int(i.record.home_5year)))),
-                    'live_humans_2030': rgb2hex(cm.ScalarMappable(
-                        norm=live_humans_2030_norm, cmap=cm.get_cmap('Oranges')
-                    ).to_rgba(float(int(i.record.home_5year)))),
+                    # 'live_humans_2030': rgb2hex(cm.ScalarMappable(
+                    #     norm=live_humans_2030_norm, cmap=cm.get_cmap('Oranges')
+                    # ).to_rgba(float(int(i.record.home_5year)))),
 
                     'potreb_2021': rgb2hex(cm.ScalarMappable(
                         norm=potreb_2021_norm, cmap=cm.get_cmap('Wistia')
@@ -64,19 +62,13 @@ class Command(BaseCommand):
                     'potreb_2025': rgb2hex(cm.ScalarMappable(
                         norm=potreb_2025_norm, cmap=cm.get_cmap('Wistia')
                     ).to_rgba(float(int(i.record.potreb_5ye)))),
-                    'potreb_2030': rgb2hex(cm.ScalarMappable(
-                        norm=potreb_2030_norm, cmap=cm.get_cmap('Wistia')
-                    ).to_rgba(float(int(i.record.potreb_5ye)))),
+                    # 'potreb_2030': rgb2hex(cm.ScalarMappable(
+                    #     norm=potreb_2030_norm, cmap=cm.get_cmap('Wistia')
+                    # ).to_rgba(float(int(i.record.potreb_5ye)))),
 
                     'work_humans': rgb2hex(cm.ScalarMappable(
                         norm=work_humans_norm, cmap=cm.get_cmap('summer')
                     ).to_rgba(float(int(i.record.job)))),
-                    # 'school': rgb2hex(cm.ScalarMappable(
-                    #     norm=school_norm, cmap=cm.get_cmap('Reds')
-                    # ).to_rgba(float(int(i.record.in_schoo_1)))),
-                    'transports': rgb2hex(cm.ScalarMappable(
-                        norm=transports_norm, cmap=cm.get_cmap('Greens')
-                    ).to_rgba(float(int(i.record.school_opt)))),
                     'optima': rgb2hex(cm.ScalarMappable(
                         norm=optima_norm, cmap=cm.get_cmap('spring')
                     ).to_rgba(float(int(i.record.school_opt)))),
