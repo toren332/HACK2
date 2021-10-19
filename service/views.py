@@ -60,3 +60,58 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
         return resp
 
 
+class SchoolViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = serializers.SchoolSerializer
+    permission_classes = [AllowAny]
+    # queryset = models.School.objects.all()
+
+    def get_bbox(self):
+        lat_min = self.request.GET.get('lat_min')
+        lat_max = self.request.GET.get('lat_max')
+        lon_min = self.request.GET.get('lon_min')
+        lon_max = self.request.GET.get('lon_max')
+        if None not in [lat_max, lat_min, lon_min, lon_max]:
+            lat_min = float(lat_min)
+            lat_max = float(lat_max)
+            lon_min = float(lon_min)
+            lon_max = float(lon_max)
+        return lat_min, lat_max, lon_min, lon_max
+
+    def get_queryset(self):
+        qs = models.School.objects.all()
+        lat_min, lat_max, lon_min, lon_max = self.get_bbox()
+        if None in [lat_max, lat_min, lon_min, lon_max]:
+            return qs
+        poly = Polygon(
+            ((lat_min, lon_min), (lat_max, lon_min), (lat_max, lon_max), (lat_min, lon_max), (lat_min, lon_min)),
+            srid=4326)
+        qs = qs.filter(point__intersects=poly)
+        return qs
+
+
+    def list(self, request, *args, **kwargs):
+        lat_min, lat_max, lon_min, lon_max = self.get_bbox()
+        queryset = self.get_queryset()
+        if None in [lat_max, lat_min, lon_min, lon_max]:
+            d = cache.get('schools')
+            d = None
+            if d is None:
+                d = json.loads(serialize('geojson', queryset,
+                                         geometry_field='point',
+                                         fields=('id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site',
+                                                 'pupils_cnt', 'nagruzka', 'nagruzka_2025year', 'phone', 'email')))
+                cache.set('schools', d, 60 * 60 * 24)
+        else:
+            d = json.loads(serialize('geojson', queryset,
+                                     geometry_field='point',
+                                     fields=(
+                                     'id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site', 'pupils_cnt',
+                                     'nagruzka', 'nagruzka_2025year', 'phone', 'email')))
+
+
+        resp = Response(d)
+        resp["Access-Control-Allow-Origin"] = '*'
+        resp["Access-Control-Allow-Methods"] = 'GET,PUT, OPTIONS'
+        resp["Access-Control-Max-Age"] = '1000'
+        resp["Access-Control-Allow-Headers"] = 'X-Requested-With, Content-Type'
+        return resp

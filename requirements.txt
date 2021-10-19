@@ -10,3 +10,4 @@ django-cors-headers
 pyshp
 matplotlib
 tqdm
+openpyxl

@@ -13,3 +13,17 @@ class Poly(models.Model):
     school = models.IntegerField()
     colors = models.JSONField()
 
+
+class School(models.Model):
+    point = gis_models.PointField()
+    name = models.CharField(max_length=256, blank=True, null=True)
+    address = models.CharField(max_length=512, blank=True, null=True)
+    rating = models.IntegerField()
+    chief_name = models.CharField(max_length=256, blank=True, null=True)
+    web_site = models.URLField(blank=True, null=True)
+    phone = models.CharField(max_length=32, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    pupils_cnt = models.IntegerField()
+    nagruzka = models.FloatField()
+    nagruzka_2025year = models.FloatField()
+

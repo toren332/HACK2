@@ -8,6 +8,7 @@ app_name = 'HACK2'
 router = routers.DefaultRouter()
 
 router.register('poly', views.PolyViewSet, basename='poly')
+router.register('schools', views.SchoolViewSet, basename='schools')
 
 urlpatterns = router.urls
 
