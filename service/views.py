@@ -7,6 +7,9 @@ from django.core.serializers import serialize
 from rest_framework.response import Response
 import json
 from django.core.cache import cache
+from rest_framework import status
+from rest_framework.decorators import action
+from django.db.models import Max, Min
 
 
 class PolyViewSet(viewsets.ReadOnlyModelViewSet):
@@ -58,6 +61,18 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
         resp["Access-Control-Max-Age"] = '1000'
         resp["Access-Control-Allow-Headers"] = 'X-Requested-With, Content-Type'
         return resp
+
+    @action(detail=False, methods=['get'])
+    def filters(self, request):
+        d = {}
+        l = []
+        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+            l.append(Min(i))
+            l.append(Max(i))
+        qs = models.Poly.objects.aggregate(*l)
+        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+            d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
+        return Response(d, status=status.HTTP_200_OK)
 
 
 class SchoolViewSet(viewsets.ReadOnlyModelViewSet):
