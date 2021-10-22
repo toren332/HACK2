@@ -44,7 +44,7 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.get_queryset()
         if None in [lat_max, lat_min, lon_min, lon_max]:
             d = cache.get('poly')
-            d = None
+            # d = None
             if d is None:
                 d = json.loads(serialize('geojson', queryset,
                                          geometry_field='polygon',
@@ -61,6 +61,45 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
         resp["Access-Control-Max-Age"] = '1000'
         resp["Access-Control-Allow-Headers"] = 'X-Requested-With, Content-Type'
         return resp
+
+    @action(detail=False, methods=['get'])
+    def filters(self, request):
+        d = {}
+        l = []
+        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+            l.append(Min(i))
+            l.append(Max(i))
+        qs = models.Poly.objects.aggregate(*l)
+        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+            d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
+        return Response(d, status=status.HTTP_200_OK)
+
+class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = serializers.PolySerializer
+    permission_classes = [AllowAny]
+
+    def get_bbox(self):
+        lat_min = self.request.GET.get('lat_min')
+        lat_max = self.request.GET.get('lat_max')
+        lon_min = self.request.GET.get('lon_min')
+        lon_max = self.request.GET.get('lon_max')
+        if None not in [lat_max, lat_min, lon_min, lon_max]:
+            lat_min = float(lat_min)
+            lat_max = float(lat_max)
+            lon_min = float(lon_min)
+            lon_max = float(lon_max)
+        return lat_min, lat_max, lon_min, lon_max
+
+    def get_queryset(self):
+        qs = models.Poly.objects.all()
+        lat_min, lat_max, lon_min, lon_max = self.get_bbox()
+        if None in [lat_max, lat_min, lon_min, lon_max]:
+            return qs
+        poly = Polygon(
+            ((lat_min, lon_min), (lat_max, lon_min), (lat_max, lon_max), (lat_min, lon_max), (lat_min, lon_min)),
+            srid=4326)
+        qs = qs.filter(polygon__intersects=poly)
+        return qs
 
     @action(detail=False, methods=['get'])
     def filters(self, request):
@@ -109,7 +148,7 @@ class SchoolViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.get_queryset()
         if None in [lat_max, lat_min, lon_min, lon_max]:
             d = cache.get('schools')
-            d = None
+            # d = None
             if d is None:
                 d = json.loads(serialize('geojson', queryset,
                                          geometry_field='point',
