@@ -101,6 +101,23 @@ class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
         qs = qs.filter(polygon__intersects=poly)
         return qs
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        lat_min, lat_max, lon_min, lon_max = self.get_bbox()
+        if None in [lat_max, lat_min, lon_min, lon_max]:
+            d = cache.get('poly_new')
+            if d is None:
+                serializer = self.get_serializer(queryset, many=True)
+                d = serializer.data
+                cache.set('poly_new', d, 60 * 60 * 24)
+                return Response(serializer.data)
+            else:
+                return Response(d)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
     @action(detail=False, methods=['get'])
     def filters(self, request):
         d = {}
