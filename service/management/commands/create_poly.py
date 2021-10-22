@@ -79,8 +79,9 @@ class Command(BaseCommand):
                 },
             }
             poly = Polygon(polygon['coordinates'][0], srid=4326)
+            geom = Polygon(polygon['coordinates'][0], srid=4326)
             poly_ = Polygon(polygon['coordinates'][0], srid=4326)
             poly_.transform(trans)
 
-            poly_models.append(Poly(polygon=poly,geometry=poly,polygon_3857=poly_, **data))
+            poly_models.append(Poly(polygon=poly,geometry=geom,polygon_3857=poly_, **data))
         Poly.objects.bulk_create(poly_models, batch_size=10000)
