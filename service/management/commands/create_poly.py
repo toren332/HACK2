@@ -73,6 +73,6 @@ class Command(BaseCommand):
                     ).to_rgba(float(int(i.record.new_school)))),
                 },
             }
-            poly = Poly(polygon=Polygon(polygon['coordinates'][0]), **data)
+            poly = Poly(polygon=Polygon(polygon['coordinates'][0], srid=4326), **data)
             poly_models.append(poly)
         Poly.objects.bulk_create(poly_models, batch_size=10000)
