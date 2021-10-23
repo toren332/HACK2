@@ -39,6 +39,16 @@ services:
       - "5435"
     command: -p 5435
 
+  martin:
+    image: urbica/martin
+    ports:
+      - 3000:3000
+    environment:
+      WATCH_MODE: "true"
+      DATABASE_URL: "postgres://${POSTGRES_USER}:${POSTGRES_PASS}@db:${POSTGRES_PORT}/${POSTGRES_DB}"
+    depends_on:
+      - db
+
 # sudo docker exec -it hack_django python manage.py create_buildings
 # sudo docker exec -it hack_django python manage.py create_poly
 # sudo docker exec -it hack_django python manage.py migrate
