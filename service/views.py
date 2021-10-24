@@ -13,6 +13,7 @@ from django.db.models import Max, Min
 import matplotlib.cm as cm
 from django.conf import settings
 from matplotlib.colors import rgb2hex
+from base64 import b64encode
 
 class PolyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.PolySerializer
@@ -85,6 +86,14 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
             d[k] = [rgb2hex(x) for x in cmap]
         return Response(d, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'])
+    def colors_png(self, request):
+        CMAPS = settings.COLORMAPS_DICT
+        d = {}
+        for k,v in CMAPS.items():
+            d[k] = b64encode(cm.get_cmap(v)._repr_png_())
+        return Response(d, status=status.HTTP_200_OK)
+
 class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.PolySerializer
     permission_classes = [AllowAny]
@@ -148,6 +157,14 @@ class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
         for k,v in CMAPS.items():
             cmap = cm.get_cmap(v)(range(256))
             d[k] = [rgb2hex(x) for x in cmap]
+        return Response(d, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def colors_png(self, request):
+        CMAPS = settings.COLORMAPS_DICT
+        d = {}
+        for k,v in CMAPS.items():
+            d[k] = b64encode(cm.get_cmap(v)._repr_png_())
         return Response(d, status=status.HTTP_200_OK)
 
 
