@@ -10,7 +10,9 @@ from django.core.cache import cache
 from rest_framework import status
 from rest_framework.decorators import action
 from django.db.models import Max, Min
-
+import matplotlib.cm as cm
+from django.conf import settings
+from matplotlib.colors import rgb2hex
 
 class PolyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.PolySerializer
@@ -74,6 +76,15 @@ class PolyViewSet(viewsets.ReadOnlyModelViewSet):
             d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
         return Response(d, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['get'])
+    def colors(self, request):
+        CMAPS = settings.COLORMAPS_DICT
+        d = {}
+        for k,v in CMAPS.items():
+            cmap = cm.get_cmap(v)(range(256))
+            d[k] = [rgb2hex(x) for x in cmap]
+        return Response(d, status=status.HTTP_200_OK)
+
 class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.PolySerializer
     permission_classes = [AllowAny]
@@ -128,6 +139,15 @@ class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
         qs = models.Poly.objects.aggregate(*l)
         for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
             d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
+        return Response(d, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['get'])
+    def colors(self, request):
+        CMAPS = settings.COLORMAPS_DICT
+        d = {}
+        for k,v in CMAPS.items():
+            cmap = cm.get_cmap(v)(range(256))
+            d[k] = [rgb2hex(x) for x in cmap]
         return Response(d, status=status.HTTP_200_OK)
 
 

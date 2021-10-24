@@ -7,6 +7,7 @@ from matplotlib.colors import rgb2hex
 from django.contrib.gis.geos import Polygon
 from tqdm import tqdm
 from django.contrib.gis.gdal import SpatialReference, CoordTransform
+from django.conf import settings
 import copy
 gcoord = SpatialReference(4326)
 mycoord = SpatialReference(3857)
@@ -25,6 +26,7 @@ def get_norm(l, prop):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
+        CMAPS = settings.COLORMAPS_DICT
         Poly.objects.all().delete()
         poly_models = []
         shape = shapefile.Reader("cells_final/cells_final.shp")
@@ -51,30 +53,30 @@ class Command(BaseCommand):
                 'work_humans': int(i.record.job),
                 'colors': {
                     'live_humans_2021': rgb2hex(cm.ScalarMappable(
-                        norm=live_humans_2021_norm, cmap=cm.get_cmap('Oranges')
+                        norm=live_humans_2021_norm, cmap=cm.get_cmap(CMAPS['live_humans_2021'])
                     ).to_rgba(float(int(i.record.home)))),
                     'live_humans_2025': rgb2hex(cm.ScalarMappable(
-                        norm=live_humans_2025_norm, cmap=cm.get_cmap('Oranges')
+                        norm=live_humans_2025_norm, cmap=cm.get_cmap(CMAPS['live_humans_2025'])
                     ).to_rgba(float(int(i.record.home_5year)))),
                     # 'live_humans_2030': rgb2hex(cm.ScalarMappable(
                     #     norm=live_humans_2030_norm, cmap=cm.get_cmap('Oranges')
                     # ).to_rgba(float(int(i.record.home_5year)))),
 
                     'potreb_2021': rgb2hex(cm.ScalarMappable(
-                        norm=potreb_2021_norm, cmap=cm.get_cmap('Wistia')
+                        norm=potreb_2021_norm, cmap=cm.get_cmap(CMAPS['potreb_2021'])
                     ).to_rgba(float(int(i.record.potreb)))),
                     'potreb_2025': rgb2hex(cm.ScalarMappable(
-                        norm=potreb_2025_norm, cmap=cm.get_cmap('Wistia')
+                        norm=potreb_2025_norm, cmap=cm.get_cmap(CMAPS['potreb_2025'])
                     ).to_rgba(float(int(i.record.potreb_5ye)))),
                     # 'potreb_2030': rgb2hex(cm.ScalarMappable(
                     #     norm=potreb_2030_norm, cmap=cm.get_cmap('Wistia')
                     # ).to_rgba(float(int(i.record.potreb_5ye)))),
 
                     'work_humans': rgb2hex(cm.ScalarMappable(
-                        norm=work_humans_norm, cmap=cm.get_cmap('summer')
+                        norm=work_humans_norm, cmap=cm.get_cmap(CMAPS['work_humans'])
                     ).to_rgba(float(int(i.record.job)))),
                     'optima': rgb2hex(cm.ScalarMappable(
-                        norm=optima_norm, cmap=cm.get_cmap('spring')
+                        norm=optima_norm, cmap=cm.get_cmap(CMAPS['optima'])
                     ).to_rgba(float(int(i.record.new_school)))),
                 },
             }

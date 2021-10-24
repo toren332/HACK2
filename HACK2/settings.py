@@ -142,3 +142,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ORIGIN_ALLOW_ALL = True # If this is used then `CORS_ORIGIN_WHITELIST` will not have any effect
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW = True
+
+COLORMAPS_DICT = {
+    'live_humans_2021': 'Oranges',
+    'live_humans_2025': 'Oranges',
+    'potreb_2021': 'Wistia',
+    'potreb_2025': 'Wistia',
+    'work_humans': 'summer',
+    'optima': 'spring',
+}
