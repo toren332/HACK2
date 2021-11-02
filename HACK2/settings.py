@@ -148,6 +148,6 @@ COLORMAPS_DICT = {
     'live_humans_2025': 'Oranges',
     'potreb_2021': 'Wistia',
     'potreb_2025': 'Wistia',
-    'work_humans': 'summer',
+    'work_humans': 'Oranges',
     'optima': 'spring',
 }

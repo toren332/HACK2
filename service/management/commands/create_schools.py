@@ -24,8 +24,8 @@ class Command(BaseCommand):
                 'phone': data.get('PublicPhone'),
                 'email': data.get('Email'),
                 'pupils_cnt': data.get('pupils_cnt'),
-                'nagruzka': data.get('nagruzka'),
-                'nagruzka_2025year': data.get('nagruzka_2025year'),
+                'nagruzka': int(data.get('nagruzka')*100),
+                'nagruzka_2025year': int(data.get('nagruzka_5year')*100),
             }
             school = School(point=Point((lng, lat), srid=4326), **new_data)
             school_models.append(school)

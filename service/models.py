@@ -3,9 +3,7 @@ from django.contrib.gis.db import models as gis_models
 
 
 class Poly(models.Model):
-    polygon = gis_models.PolygonField()
-    geometry = gis_models.PolygonField(null=True)
-    polygon_3857 = gis_models.PolygonField(srid=3857, null=True)
+    geometry = gis_models.PolygonField()
     live_humans_2021 = models.IntegerField()
     live_humans_2025 = models.IntegerField()
     potreb_2021 = models.IntegerField()
