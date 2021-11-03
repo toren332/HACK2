@@ -7,11 +7,6 @@ from matplotlib.colors import rgb2hex
 from django.contrib.gis.geos import Polygon
 from tqdm import tqdm
 from django.conf import settings
-from django.contrib.gis.gdal import SpatialReference, CoordTransform
-
-gcoord = SpatialReference(4326)
-mycoord = SpatialReference(3857)
-trans = CoordTransform(gcoord, mycoord)
 
 
 def min_max(l, prop):
@@ -84,6 +79,5 @@ class Command(BaseCommand):
                 },
             }
             geom = Polygon(polygon['coordinates'][0], srid=4326)
-            geom.transform(trans)
             poly_models.append(Poly(geometry=geom, **data))
         Poly.objects.bulk_create(poly_models, batch_size=10000)
