@@ -53,30 +53,31 @@ class Command(BaseCommand):
                 'optima': int(i.record.new_school),
                 'school': int(i.record.in_schoo_1),
                 'work_humans': int(i.record.job),
-                'colors': {
-                    'live_humans_2021': rgb2hex(cm.ScalarMappable(
-                        norm=live_humans_norm, cmap=cm.get_cmap(CMAPS['live_humans_2021'])
-                    ).to_rgba(float(int(i.record.home)))),
-                    'live_humans_2025': rgb2hex(cm.ScalarMappable(
-                        norm=live_humans_norm, cmap=cm.get_cmap(CMAPS['live_humans_2025'])
-                    ).to_rgba(float(int(i.record.home_5year)))),
-
-
-                    'potreb_2021': rgb2hex(cm.ScalarMappable(
-                        norm=potrb_norm, cmap=cm.get_cmap(CMAPS['potreb_2021'])
-                    ).to_rgba(float(int(i.record.potreb)))),
-                    'potreb_2025': rgb2hex(cm.ScalarMappable(
-                        norm=potrb_norm, cmap=cm.get_cmap(CMAPS['potreb_2025'])
-                    ).to_rgba(float(int(i.record.potreb_5ye)))),
-
-
-                    'work_humans': rgb2hex(cm.ScalarMappable(
-                        norm=work_humans_norm, cmap=cm.get_cmap(CMAPS['work_humans'])
-                    ).to_rgba(float(int(i.record.job)))),
-                    'optima': rgb2hex(cm.ScalarMappable(
-                        norm=optima_norm, cmap=cm.get_cmap(CMAPS['optima'])
-                    ).to_rgba(float(int(i.record.new_school)))),
-                },
+                'colors': {},
+                # 'colors': {
+                #     'live_humans_2021': rgb2hex(cm.ScalarMappable(
+                #         norm=live_humans_norm, cmap=cm.get_cmap(CMAPS['live_humans_2021'])
+                #     ).to_rgba(float(int(i.record.home)))),
+                #     'live_humans_2025': rgb2hex(cm.ScalarMappable(
+                #         norm=live_humans_norm, cmap=cm.get_cmap(CMAPS['live_humans_2025'])
+                #     ).to_rgba(float(int(i.record.home_5year)))),
+                #
+                #
+                #     'potreb_2021': rgb2hex(cm.ScalarMappable(
+                #         norm=potrb_norm, cmap=cm.get_cmap(CMAPS['potreb_2021'])
+                #     ).to_rgba(float(int(i.record.potreb)))),
+                #     'potreb_2025': rgb2hex(cm.ScalarMappable(
+                #         norm=potrb_norm, cmap=cm.get_cmap(CMAPS['potreb_2025'])
+                #     ).to_rgba(float(int(i.record.potreb_5ye)))),
+                #
+                #
+                #     'work_humans': rgb2hex(cm.ScalarMappable(
+                #         norm=work_humans_norm, cmap=cm.get_cmap(CMAPS['work_humans'])
+                #     ).to_rgba(float(int(i.record.job)))),
+                #     'optima': rgb2hex(cm.ScalarMappable(
+                #         norm=optima_norm, cmap=cm.get_cmap(CMAPS['optima'])
+                #     ).to_rgba(float(int(i.record.new_school)))),
+                # },
             }
             geom = Polygon(polygon['coordinates'][0], srid=4326)
             poly_models.append(Poly(geometry=geom, **data))
