@@ -70,11 +70,11 @@ class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
         qs = models.Poly.objects.aggregate(*l)
         for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
             d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
-        qs_2 = models.School.objects.aggregate(*l)
         l2 = []
         for i in ['nagruzka', 'nagruzka_2025year']:
             l2.append(Min(i))
             l2.append(Max(i))
+        qs_2 = models.School.objects.aggregate(*l2)
         for i in ['nagruzka', 'nagruzka_2025year']:
             d[i] = [qs_2[f'{i}__min'], qs_2[f'{i}__max']]
         return Response(d, status=status.HTTP_200_OK)
