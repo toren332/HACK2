@@ -35,7 +35,7 @@ class Command(BaseCommand):
         CMAPS = settings.COLORMAPS_DICT
         Poly.objects.all().delete()
         poly_models = []
-        shape = shapefile.Reader("cells_final/cells1.shp")
+        shape = shapefile.Reader("cells_final1/cells_final1.shp")
         shape_records = list(shape.shapeRecords())
         live_humans_norm = get_norm_double(shape_records,'home', 'home_5year')
         potrb_norm = get_norm_double(shape_records,'potreb', 'potreb_5ye')
@@ -49,6 +49,12 @@ class Command(BaseCommand):
 
                 'potreb_2021': int(i.record.potreb),
                 'potreb_2025': int(i.record.potreb_5ye),
+                'new_sc_rat': int(i.record.new_sc_rat),
+                'new_school': int(i.record.new_school),
+                'potr_rat25': int(i.record.potr_rat25),
+                'potreb_rat': int(i.record.potreb_rat),
+                'share_buil': round(float(i.record.share_buil),2),
+                'transport': int(i.record.transport),
 
                 'optima': int(i.record.new_school),
                 'school': int(i.record.in_schoo_1),

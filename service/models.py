@@ -11,6 +11,12 @@ class Poly(models.Model):
     work_humans = models.IntegerField()
     optima = models.IntegerField()
     school = models.IntegerField()
+    new_sc_rat = models.IntegerField()
+    new_school = models.IntegerField()
+    potr_rat25 = models.IntegerField()
+    potreb_rat = models.IntegerField()
+    share_buil = models.FloatField()
+    transport = models.IntegerField()
     colors = models.JSONField()
 
 
