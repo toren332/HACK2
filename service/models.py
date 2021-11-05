@@ -32,4 +32,7 @@ class School(models.Model):
     pupils_cnt = models.IntegerField()
     nagruzka = models.FloatField()
     nagruzka_2025year = models.FloatField()
+    year = models.IntegerField()
+    nagruzka_rat = models.FloatField()
+    nagruzka_rat_5year = models.FloatField()
 

@@ -10,6 +10,7 @@ class Command(BaseCommand):
         School.objects.all().delete()
         school_models = []
         df = pd.read_excel('schools_final.xlsx')
+        df = df.fillna(0)
         df_rows = list(df.iterrows())
         for id_, i in tqdm(df_rows):
             data = i.to_dict()
@@ -24,6 +25,9 @@ class Command(BaseCommand):
                 'phone': data.get('PublicPhone'),
                 'email': data.get('Email'),
                 'pupils_cnt': data.get('pupils_cnt'),
+                'year': data.get('year'),
+                'nagruzka_rat': data.get('nagruzka_rat'),
+                'nagruzka_rat_5year': data.get('nagruzka_rat_5year'),
                 'nagruzka': int(data.get('nagruzka')*100),
                 'nagruzka_2025year': int(data.get('nagruzka_5year')*100),
             }
