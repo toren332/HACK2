@@ -9,7 +9,6 @@ class Poly(models.Model):
     potreb_2021 = models.IntegerField()
     potreb_2025 = models.IntegerField()
     work_humans = models.IntegerField()
-    optima = models.IntegerField()
     school = models.IntegerField()
     new_sc_rat = models.IntegerField()
     new_school = models.IntegerField()

@@ -64,18 +64,25 @@ class PolyNewViewSet(viewsets.ReadOnlyModelViewSet):
     def filters(self, request):
         d = {}
         l = []
-        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+        poly_fields = [x.column for x in models.Poly._meta.get_fields()]
+        poly_fields.remove('id')
+        poly_fields.remove('geometry')
+        poly_fields.remove('colors')
+        for i in poly_fields:
             l.append(Min(i))
             l.append(Max(i))
         qs = models.Poly.objects.aggregate(*l)
-        for i in ['live_humans_2021', 'live_humans_2025', 'potreb_2021', 'potreb_2025', 'optima', 'school', 'work_humans']:
+        for i in poly_fields:
             d[i]=[qs[f'{i}__min'], qs[f'{i}__max']]
         l2 = []
-        for i in ['nagruzka', 'nagruzka_2025year']:
+        school_fields = [x.column for x in models.School._meta.get_fields()]
+        school_fields.remove('id')
+        school_fields.remove('point')
+        for i in school_fields:
             l2.append(Min(i))
             l2.append(Max(i))
         qs_2 = models.School.objects.aggregate(*l2)
-        for i in ['nagruzka', 'nagruzka_2025year']:
+        for i in school_fields:
             d[i] = [qs_2[f'{i}__min'], qs_2[f'{i}__max']]
         return Response(d, status=status.HTTP_200_OK)
 

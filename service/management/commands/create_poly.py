@@ -56,7 +56,6 @@ class Command(BaseCommand):
                 'share_buil': round(float(i.record.share_buil),2),
                 'transport': int(i.record.transport),
 
-                'optima': int(i.record.new_school),
                 'school': int(i.record.in_schoo_1),
                 'work_humans': int(i.record.job),
                 'colors': {},
