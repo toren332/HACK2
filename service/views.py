@@ -142,15 +142,12 @@ class SchoolViewSet(viewsets.ReadOnlyModelViewSet):
             if d is None:
                 d = json.loads(serialize('geojson', queryset,
                                          geometry_field='point',
-                                         fields=('id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site',
-                                                 'pupils_cnt', 'nagruzka', 'nagruzka_2025year', 'phone', 'email')))
+                                         fields=('id', 'name', 'address', 'rating', 'chief_name', 'web_site', 'phone', 'email', 'pupils_cnt', 'nagruzka', 'nagruzka_2025year', 'year', 'nagruzka_rat', 'nagruzka_rat_5year')))
                 cache.set('schools', d, 60 * 60 * 24)
         else:
             d = json.loads(serialize('geojson', queryset,
                                      geometry_field='point',
-                                     fields=(
-                                     'id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site', 'pupils_cnt',
-                                     'nagruzka', 'nagruzka_2025year', 'phone', 'email')))
+                                     fields=('id', 'name', 'address', 'rating', 'chief_name', 'web_site', 'phone', 'email', 'pupils_cnt', 'nagruzka', 'nagruzka_2025year', 'year', 'nagruzka_rat', 'nagruzka_rat_5year')))
 
 
         resp = Response(d)

@@ -13,4 +13,4 @@ class SchoolSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.School
-        fields = ['id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site', 'pupils_cnt', 'nagruzka', 'nagruzka_2025year','phone', 'email',]
+        fields = ['id', 'point', 'name', 'address', 'rating', 'chief_name', 'web_site', 'phone', 'email', 'pupils_cnt', 'nagruzka', 'nagruzka_2025year', 'year', 'nagruzka_rat', 'nagruzka_rat_5year']
